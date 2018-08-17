@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="VideoAppPOCModelStoreContainer" CdmEntityContainer="VideoAppPOCEntities2">
+    <EntitySetMapping Name="AppRoles">
+      <EntityTypeMapping TypeName="VideoAppPOCModel.AppRole">
+        <MappingFragment StoreEntitySet="AppRole">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="roleName" ColumnName="roleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AppUsers">
+      <EntityTypeMapping TypeName="VideoAppPOCModel.AppUser">
+        <MappingFragment StoreEntitySet="AppUser">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="passWord" ColumnName="passWord" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AppVideoUsers">
+      <EntityTypeMapping TypeName="VideoAppPOCModel.AppVideoUser">
+        <MappingFragment StoreEntitySet="AppVideoUser">
+          <ScalarProperty Name="VideoID" ColumnName="VideoID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="VideoUserID" ColumnName="VideoUserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AppVideos">
+      <EntityTypeMapping TypeName="VideoAppPOCModel.AppVideo">
+        <MappingFragment StoreEntitySet="AppVideo">
+          <ScalarProperty Name="uploadDate" ColumnName="uploadDate" />
+          <ScalarProperty Name="VideoDescription" ColumnName="VideoDescription" />
+          <ScalarProperty Name="VideoPath" ColumnName="VideoPath" />
+          <ScalarProperty Name="VideoSubject" ColumnName="VideoSubject" />
+          <ScalarProperty Name="VideoTitle" ColumnName="VideoTitle" />
+          <ScalarProperty Name="VideoID" ColumnName="VideoID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

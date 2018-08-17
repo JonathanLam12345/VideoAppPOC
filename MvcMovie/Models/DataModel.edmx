@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VideoAppPOCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="roleName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="50" />
+          <Property Name="passWord" Type="varchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AppVideo">
+          <Key>
+            <PropertyRef Name="VideoID" />
+          </Key>
+          <Property Name="VideoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VideoTitle" Type="varchar" MaxLength="50" />
+          <Property Name="VideoSubject" Type="varchar" MaxLength="50" />
+          <Property Name="VideoPath" Type="varchar" MaxLength="50" />
+          <Property Name="VideoDescription" Type="varchar" MaxLength="50" />
+          <Property Name="uploadDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AppVideoUser">
+          <Key>
+            <PropertyRef Name="VideoUserID" />
+          </Key>
+          <Property Name="VideoUserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="VideoID" Type="int" />
+        </EntityType>
+        <Association Name="FK_AppUser_AppRole">
+          <End Role="AppRole" Type="Self.AppRole" Multiplicity="1" />
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppRole">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="AppUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppVideoUser_AppUser">
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="0..1" />
+          <End Role="AppVideoUser" Type="Self.AppVideoUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AppVideoUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppVideoUser_AppVideo">
+          <End Role="AppVideo" Type="Self.AppVideo" Multiplicity="0..1" />
+          <End Role="AppVideoUser" Type="Self.AppVideoUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppVideo">
+              <PropertyRef Name="VideoID" />
+            </Principal>
+            <Dependent Role="AppVideoUser">
+              <PropertyRef Name="VideoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VideoAppPOCModelStoreContainer">
+          <EntitySet Name="AppRole" EntityType="Self.AppRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppVideo" EntityType="Self.AppVideo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppVideoUser" EntityType="Self.AppVideoUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AppUser_AppRole" Association="Self.FK_AppUser_AppRole">
+            <End Role="AppRole" EntitySet="AppRole" />
+            <End Role="AppUser" EntitySet="AppUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppVideoUser_AppUser" Association="Self.FK_AppVideoUser_AppUser">
+            <End Role="AppUser" EntitySet="AppUser" />
+            <End Role="AppVideoUser" EntitySet="AppVideoUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppVideoUser_AppVideo" Association="Self.FK_AppVideoUser_AppVideo">
+            <End Role="AppVideo" EntitySet="AppVideo" />
+            <End Role="AppVideoUser" EntitySet="AppVideoUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VideoAppPOCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AppRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AppUsers1" Relationship="VideoAppPOCModel.FK_AppUser_AppRole" FromRole="AppRole" ToRole="AppUser" />
+        </EntityType>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="passWord" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AppRole" Relationship="VideoAppPOCModel.FK_AppUser_AppRole" FromRole="AppUser" ToRole="AppRole" />
+          <NavigationProperty Name="AppVideoUsers" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppUser" FromRole="AppUser" ToRole="AppVideoUser" />
+        </EntityType>
+        <EntityContainer Name="VideoAppPOCEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AppRoles" EntityType="Self.AppRole" />
+          <EntitySet Name="AppUsers" EntityType="Self.AppUser" />
+          <AssociationSet Name="FK_AppUser_AppRole" Association="VideoAppPOCModel.FK_AppUser_AppRole">
+            <End Role="AppRole" EntitySet="AppRoles" />
+            <End Role="AppUser" EntitySet="AppUsers" />
+          </AssociationSet>
+          <EntitySet Name="AppVideoUsers" EntityType="VideoAppPOCModel.AppVideoUser" />
+          <AssociationSet Name="FK_AppVideoUser_AppUser" Association="VideoAppPOCModel.FK_AppVideoUser_AppUser">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="AppVideoUser" EntitySet="AppVideoUsers" />
+          </AssociationSet>
+          <EntitySet Name="AppVideos" EntityType="VideoAppPOCModel.AppVideo" />
+          <AssociationSet Name="FK_AppVideoUser_AppVideo" Association="VideoAppPOCModel.FK_AppVideoUser_AppVideo">
+            <End Role="AppVideo" EntitySet="AppVideos" />
+            <End Role="AppVideoUser" EntitySet="AppVideoUsers" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_AppUser_AppRole">
+          <End Type="VideoAppPOCModel.AppRole" Role="AppRole" Multiplicity="1" />
+          <End Type="VideoAppPOCModel.AppUser" Role="AppUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppRole">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="AppUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AppVideoUser">
+          <Key>
+            <PropertyRef Name="VideoUserID" />
+          </Key>
+          <Property Name="VideoUserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="VideoID" Type="Int32" />
+          <NavigationProperty Name="AppUser" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppUser" FromRole="AppVideoUser" ToRole="AppUser" />
+          <NavigationProperty Name="AppVideo" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppVideo" FromRole="AppVideoUser" ToRole="AppVideo" />
+        </EntityType>
+        <Association Name="FK_AppVideoUser_AppUser">
+          <End Type="VideoAppPOCModel.AppUser" Role="AppUser" Multiplicity="0..1" />
+          <End Type="VideoAppPOCModel.AppVideoUser" Role="AppVideoUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AppVideoUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AppVideo">
+          <Key>
+            <PropertyRef Name="VideoID" />
+          </Key>
+          <Property Name="VideoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VideoTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VideoSubject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VideoPath" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VideoDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="uploadDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AppVideoUsers" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppVideo" FromRole="AppVideo" ToRole="AppVideoUser" />
+        </EntityType>
+        <Association Name="FK_AppVideoUser_AppVideo">
+          <End Type="VideoAppPOCModel.AppVideo" Role="AppVideo" Multiplicity="0..1" />
+          <End Type="VideoAppPOCModel.AppVideoUser" Role="AppVideoUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppVideo">
+              <PropertyRef Name="VideoID" />
+            </Principal>
+            <Dependent Role="AppVideoUser">
+              <PropertyRef Name="VideoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VideoAppPOCModelStoreContainer" CdmEntityContainer="VideoAppPOCEntities2">
+          <EntitySetMapping Name="AppRoles">
+            <EntityTypeMapping TypeName="VideoAppPOCModel.AppRole">
+              <MappingFragment StoreEntitySet="AppRole">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppUsers">
+            <EntityTypeMapping TypeName="VideoAppPOCModel.AppUser">
+              <MappingFragment StoreEntitySet="AppUser">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="passWord" ColumnName="passWord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppVideoUsers">
+            <EntityTypeMapping TypeName="VideoAppPOCModel.AppVideoUser">
+              <MappingFragment StoreEntitySet="AppVideoUser">
+                <ScalarProperty Name="VideoID" ColumnName="VideoID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="VideoUserID" ColumnName="VideoUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppVideos">
+            <EntityTypeMapping TypeName="VideoAppPOCModel.AppVideo">
+              <MappingFragment StoreEntitySet="AppVideo">
+                <ScalarProperty Name="uploadDate" ColumnName="uploadDate" />
+                <ScalarProperty Name="VideoDescription" ColumnName="VideoDescription" />
+                <ScalarProperty Name="VideoPath" ColumnName="VideoPath" />
+                <ScalarProperty Name="VideoSubject" ColumnName="VideoSubject" />
+                <ScalarProperty Name="VideoTitle" ColumnName="VideoTitle" />
+                <ScalarProperty Name="VideoID" ColumnName="VideoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

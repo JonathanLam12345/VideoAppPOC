@@ -1,0 +1,83 @@
+﻿@model MvcMovie.Models.AppVideo
+
+@{
+    ViewBag.Title = "upload";
+    Layout = "~/Views/Shared/_LayoutPartial.cshtml";
+}
+@{
+    List<SelectListItem> items = new List<SelectListItem>();
+    SelectListItem item1 = new SelectListItem() { Text = "internal medicine", Value = "internal medicine", Selected = false };
+    SelectListItem item2 = new SelectListItem() { Text = "surgery department", Value = "surgery department", Selected = false };
+    SelectListItem item3 = new SelectListItem() { Text = "radiology department", Value = "radiology department", Selected = false };
+    items.Add(item1);
+    items.Add(item2);
+    items.Add(item3);
+
+}
+
+<h2>upload</h2>
+
+@using (Html.BeginForm("upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>AppVideo</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+     
+        <div class="form-group">
+            @Html.LabelFor(model => model.VideoTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.VideoTitle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VideoTitle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VideoSubject, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.VideoSubject, items, "--please select one subject--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.VideoSubject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VideoPath, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="VideoFile" required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VideoDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.VideoDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VideoDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" onclick="myFunction()" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    function myFunction() {
+        alert("video upload successfully");
+    }
+</script>

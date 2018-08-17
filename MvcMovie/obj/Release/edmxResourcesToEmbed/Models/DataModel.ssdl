@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VideoAppPOCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AppRole">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="int" Nullable="false" />
+    <Property Name="roleName" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="AppUser">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="userName" Type="varchar" MaxLength="50" />
+    <Property Name="passWord" Type="varchar" MaxLength="50" />
+    <Property Name="RoleID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AppVideo">
+    <Key>
+      <PropertyRef Name="VideoID" />
+    </Key>
+    <Property Name="VideoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VideoTitle" Type="varchar" MaxLength="50" />
+    <Property Name="VideoSubject" Type="varchar" MaxLength="50" />
+    <Property Name="VideoPath" Type="varchar" MaxLength="50" />
+    <Property Name="VideoDescription" Type="varchar" MaxLength="50" />
+    <Property Name="uploadDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="AppVideoUser">
+    <Key>
+      <PropertyRef Name="VideoUserID" />
+    </Key>
+    <Property Name="VideoUserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="VideoID" Type="int" />
+  </EntityType>
+  <Association Name="FK_AppUser_AppRole">
+    <End Role="AppRole" Type="Self.AppRole" Multiplicity="1" />
+    <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppRole">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="AppUser">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AppVideoUser_AppUser">
+    <End Role="AppUser" Type="Self.AppUser" Multiplicity="0..1" />
+    <End Role="AppVideoUser" Type="Self.AppVideoUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppUser">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="AppVideoUser">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AppVideoUser_AppVideo">
+    <End Role="AppVideo" Type="Self.AppVideo" Multiplicity="0..1" />
+    <End Role="AppVideoUser" Type="Self.AppVideoUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppVideo">
+        <PropertyRef Name="VideoID" />
+      </Principal>
+      <Dependent Role="AppVideoUser">
+        <PropertyRef Name="VideoID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="VideoAppPOCModelStoreContainer">
+    <EntitySet Name="AppRole" EntityType="Self.AppRole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AppVideo" EntityType="Self.AppVideo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AppVideoUser" EntityType="Self.AppVideoUser" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AppUser_AppRole" Association="Self.FK_AppUser_AppRole">
+      <End Role="AppRole" EntitySet="AppRole" />
+      <End Role="AppUser" EntitySet="AppUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AppVideoUser_AppUser" Association="Self.FK_AppVideoUser_AppUser">
+      <End Role="AppUser" EntitySet="AppUser" />
+      <End Role="AppVideoUser" EntitySet="AppVideoUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AppVideoUser_AppVideo" Association="Self.FK_AppVideoUser_AppVideo">
+      <End Role="AppVideo" EntitySet="AppVideo" />
+      <End Role="AppVideoUser" EntitySet="AppVideoUser" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

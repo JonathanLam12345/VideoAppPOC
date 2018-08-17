@@ -1,0 +1,104 @@
+﻿@model  MvcMovie.ViewModel.CheckBoxView
+@{
+    ViewBag.Title = "AssignOnVideo";
+    Layout = "~/Views/Shared/_LayoutPartial.cshtml";
+
+}
+@Scripts.Render("~/bundles/jquery")
+<style type="text/css">
+    .table-condensed {
+        width: 300px;
+        height: 300px;
+        position: fixed;
+        margin-left: -150px; /* half of width */
+        margin-top: -150px; /* half of height */
+        top: 50%;
+        left: 50%;
+    }
+</style>
+@using (Html.BeginForm("AssignOnVideo", "AssignPage", FormMethod.Post))
+{
+
+    <body>
+        <h2>this is AssignOnVideo page</h2>
+
+        <table class="table-condensed" style="border:1px solid lightgrey;border-collapse: collapse;border-color:blanchedalmond">
+            <tr style="vertical-align:top">
+                <th height="7">
+                    Video Title
+                </th>
+                <th height="14">
+                    Video Title
+                </th>
+            </tr>
+            <tr class="success" style="vertical-align:top">
+                <td>
+                    @Html.DropDownListFor(model => model.VideoID, ViewBag.getVideo as SelectList)
+                </td>
+                <td>
+
+                    @for (int i = 0; i < Model.users.Count(); i++)
+                    {
+                        <br />
+                        @Html.CheckBoxFor(x => Model.users[i].isChecked)
+                        @Html.HiddenFor(x => Model.users[i].UserId)
+                        @Html.DisplayFor(x => Model.users[i].userName)
+                    }
+                </td>
+            </tr>
+            <tr>
+
+                <td style="text-align:right; margin-left: 20px">
+
+                    <input type="submit" value="Submit" class="btn btn-primary" onclick="myFunction()" />
+
+                </td>
+            </tr>
+
+
+        </table>
+    </body>
+}
+    <script>
+        //function myFunction() {
+        //    alert("video assign successfully");
+
+        //}
+        var currentSelectOption
+        @{ 
+            if (@ViewBag.curretSelectedVideoId != null) {
+                @:currentSelectOption = ViewBag.curretSelectedVideoId;
+            }
+        }
+
+        if (currentSelectOption != null && currentSelectOption != '') {
+            $("#VideoID").val(currentSelectOption);
+        }
+
+        $("#VideoID").change(function () {
+            console.log($(this).val());
+            $.ajax({
+                url: '/AssignPage/GetUserListByVideoId',
+                type: 'POST',
+                data: JSON.stringify({ VideoId: $(this).val() }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var data = JSON.parse(data);
+                    updateCheckListView(data);
+                },
+                error: function () {
+                }
+            });
+        });
+
+        function updateCheckListView(data) {
+            console.log(data);
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].IsChecked) {
+                    $("#users_" + i + "__isChecked").prop('checked', true);
+                } else {
+                    $("#users_" + i + "__isChecked").prop('checked', false);
+                }
+            }
+        }
+    </script>

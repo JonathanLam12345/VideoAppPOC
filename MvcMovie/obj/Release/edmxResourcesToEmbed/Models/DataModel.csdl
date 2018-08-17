@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VideoAppPOCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AppRole">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="AppUsers1" Relationship="VideoAppPOCModel.FK_AppUser_AppRole" FromRole="AppRole" ToRole="AppUser" />
+  </EntityType>
+  <EntityType Name="AppUser">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="passWord" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AppRole" Relationship="VideoAppPOCModel.FK_AppUser_AppRole" FromRole="AppUser" ToRole="AppRole" />
+    <NavigationProperty Name="AppVideoUsers" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppUser" FromRole="AppUser" ToRole="AppVideoUser" />
+  </EntityType>
+  <EntityContainer Name="VideoAppPOCEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AppRoles" EntityType="Self.AppRole" />
+    <EntitySet Name="AppUsers" EntityType="Self.AppUser" />
+    <AssociationSet Name="FK_AppUser_AppRole" Association="VideoAppPOCModel.FK_AppUser_AppRole">
+      <End Role="AppRole" EntitySet="AppRoles" />
+      <End Role="AppUser" EntitySet="AppUsers" />
+    </AssociationSet>
+    <EntitySet Name="AppVideoUsers" EntityType="VideoAppPOCModel.AppVideoUser" />
+    <AssociationSet Name="FK_AppVideoUser_AppUser" Association="VideoAppPOCModel.FK_AppVideoUser_AppUser">
+      <End Role="AppUser" EntitySet="AppUsers" />
+      <End Role="AppVideoUser" EntitySet="AppVideoUsers" />
+    </AssociationSet>
+    <EntitySet Name="AppVideos" EntityType="VideoAppPOCModel.AppVideo" />
+    <AssociationSet Name="FK_AppVideoUser_AppVideo" Association="VideoAppPOCModel.FK_AppVideoUser_AppVideo">
+      <End Role="AppVideo" EntitySet="AppVideos" />
+      <End Role="AppVideoUser" EntitySet="AppVideoUsers" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_AppUser_AppRole">
+    <End Type="VideoAppPOCModel.AppRole" Role="AppRole" Multiplicity="1" />
+    <End Type="VideoAppPOCModel.AppUser" Role="AppUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppRole">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="AppUser">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="AppVideoUser">
+    <Key>
+      <PropertyRef Name="VideoUserID" />
+    </Key>
+    <Property Name="VideoUserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="VideoID" Type="Int32" />
+    <NavigationProperty Name="AppUser" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppUser" FromRole="AppVideoUser" ToRole="AppUser" />
+    <NavigationProperty Name="AppVideo" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppVideo" FromRole="AppVideoUser" ToRole="AppVideo" />
+  </EntityType>
+  <Association Name="FK_AppVideoUser_AppUser">
+    <End Type="VideoAppPOCModel.AppUser" Role="AppUser" Multiplicity="0..1" />
+    <End Type="VideoAppPOCModel.AppVideoUser" Role="AppVideoUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppUser">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="AppVideoUser">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="AppVideo">
+    <Key>
+      <PropertyRef Name="VideoID" />
+    </Key>
+    <Property Name="VideoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VideoTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VideoSubject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VideoPath" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VideoDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="uploadDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="AppVideoUsers" Relationship="VideoAppPOCModel.FK_AppVideoUser_AppVideo" FromRole="AppVideo" ToRole="AppVideoUser" />
+  </EntityType>
+  <Association Name="FK_AppVideoUser_AppVideo">
+    <End Type="VideoAppPOCModel.AppVideo" Role="AppVideo" Multiplicity="0..1" />
+    <End Type="VideoAppPOCModel.AppVideoUser" Role="AppVideoUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppVideo">
+        <PropertyRef Name="VideoID" />
+      </Principal>
+      <Dependent Role="AppVideoUser">
+        <PropertyRef Name="VideoID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

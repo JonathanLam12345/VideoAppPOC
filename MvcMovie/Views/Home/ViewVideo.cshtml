@@ -1,0 +1,53 @@
+﻿@model MvcMovie.Models.AppVideo
+
+@{
+    ViewBag.Title = "ViewVideo";
+    Layout = "~/Views/Shared/_LayoutPartial.cshtml";
+}
+
+<h2>this is view video page</h2>
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.VideoID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VideoID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VideoTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VideoTitle)
+        </dd>
+        <dt>
+
+        </dt>
+        <dd>
+     <video id="videoplayer" src="@Url.Content(Model.VideoPath)" controls width="450" height="450" loop/>
+            @*<img src="@Url.Content(Model.VideoPath)" width="250" height="250" />*@
+        </dd>
+  
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VideoDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VideoDescription)
+        </dd>
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
